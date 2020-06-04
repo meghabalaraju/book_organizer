@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './App.css';
 
-class ListBooks extends Component {
+class Books extends Component {
 
     /**
      * @description: Calls updateshelfstate func in App.js
@@ -12,14 +12,13 @@ class ListBooks extends Component {
     */
     handleChange = (e, book) => {
       const { value } = e.target;
-
         if(value !== book.shelf) {
           this.props.updateShelfState(book, value);
         } else {
           alert(`You have already added the book to ${value} section. Please chose another option`)
       }
-      
     };
+    
 
     render() {
         const { bookShelves } = this.props;
@@ -45,14 +44,14 @@ class ListBooks extends Component {
                                           <div className="book-top">
                                               <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${cBook.imageLinks.thumbnail})` }}></div>
                                               <div className="book-shelf-changer">
-                                                  <select className="select" defaultValue={'move'} onClick={(e) => this.handleChange(e, cBook)}>
+                                                  <select className="select" defaultValue={cBook.shelf} onChange={(e) => this.handleChange(e, cBook)}>
                                                       <option value="move"  disabled>Move to...</option>
                   
                                                       {option.map((key, i) => (
-                                                        <option className={[key === cBook.shelf]} value={key} key={i}>{key}</option>
+                                                        <option value={key} key={i}>{key}</option>
                                                       ))}
                                                       
-                                                      <option value="none">None</option>
+                                                      <option value="none">none</option>
                                                   </select>
                                               </div>
                                           </div>
@@ -80,9 +79,9 @@ class ListBooks extends Component {
     }
 }
 
-ListBooks.propTypes = {
+Books.propTypes = {
   bookShelves: PropTypes.object.isRequired,
   updateShelfState: PropTypes.func.isRequired
 };
 
-export default ListBooks;
+export default Books;

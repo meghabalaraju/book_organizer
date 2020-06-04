@@ -10,6 +10,7 @@ class SearchBooks extends Component {
         query: '',
         books: []
     };
+    
 
     /**
      * @description - updates query in state whenever it changes
@@ -17,7 +18,6 @@ class SearchBooks extends Component {
      */
     handleQuery = (e) => {
         const { value } = e.target;
-
         this.setState(() => ({
             query: value
         }));
@@ -28,8 +28,8 @@ class SearchBooks extends Component {
         } else {
             this.setState({books: []});
         }
-
     };
+
 
     /**
      * @description - Fetches books from BooksAPI based on user input
@@ -38,14 +38,16 @@ class SearchBooks extends Component {
     searchBooks = (query) => {
         BookAPI.search(query)
             .then((books) => {
-                
                 const { Books } = this.props;
-                const result = !books.items
-                ? this.addShelf(books, Books)
-                : this.setState({books: []})
-
-                return result;
-
+                if(!books.items) {
+                    books.forEach((book) => {
+                        book.shelf = 'none';
+                    });
+                    this.addShelf(books, Books);
+                } else {
+                    this.setState({books: []})
+                }
+                return books;
             });
     };
 
@@ -116,12 +118,12 @@ class SearchBooks extends Component {
                                     <div className="book-top">
                                         <div className="book-cover" style={ cBook.imageLinks ? { width: 128, height: 193, backgroundImage: `url(${cBook.imageLinks.thumbnail})` } : {width: 128, height: 193} }></div>
                                             <div className="book-shelf-changer">
-                                                <select defaultValue={'move'} onChange={(e) => this.handleChange(e, cBook)}>
+                                                <select defaultValue={cBook.shelf} onChange={(e) => this.handleChange(e, cBook)}>
                                                     <option value="move" disabled>Move to...</option>
                                                     {option.map((key, i) => (
-                                                        <option className={[key === cBook.shelf]} value={key} key={i}>{key}</option>
+                                                        <option value={key} key={i}>{key}</option>
                                                     ))}
-                                                    <option value="none">None</option>
+                                                    <option value="none">none</option>
                                                 </select>
                                             </div>
                                         </div>
