@@ -1,8 +1,9 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import ListBooks from './Books'
 import SearchBooks from './SearchBooks'
+import GenericNotFound from './GenericNotFound'
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -69,7 +70,7 @@ class BooksApp extends React.Component {
     this.bookShelfing();
   };
 
-  
+
   /**
    * @description: Updates book'S shelf in BooksAPI
    * @param {object} book - The book which shelf needs to be updated
@@ -88,20 +89,23 @@ class BooksApp extends React.Component {
     const { Books, bookShelf } = this.state;
     return (
         <div className="app">
-          <Route exact path='/' render={()=> (
-            <ListBooks 
-              bookShelves={bookShelf}
-              updateShelfState={this.updateShelf}
-            />
-          )}/>
-          <Route path='/search' render={() => (
-            <SearchBooks 
-              Books={Books}
-              bookShelves={bookShelf}
-              updateShelfState={this.updateShelf}
-            />
-          )}
-        />
+          <Switch>
+              <Route exact path='/' render={()=> (
+                  <ListBooks 
+                    bookShelves={bookShelf}
+                    updateShelfState={this.updateShelf}
+                  />
+              )}/>
+       
+              <Route path='/search' render={() => (
+                <SearchBooks 
+                  Books={Books}
+                  bookShelves={bookShelf}
+                  updateShelfState={this.updateShelf}
+                />
+              )}/>
+              <Route component={GenericNotFound} />
+          </Switch>
       </div>
     )
   }
