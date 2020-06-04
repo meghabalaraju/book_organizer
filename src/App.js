@@ -11,9 +11,11 @@ class BooksApp extends React.Component {
       bookShelf: {}
   };
 
+
   componentDidMount = () => {
     this.getAllBooks();
   };
+
 
   /**
    * @description Fetches all books from BooksAPI
@@ -27,7 +29,8 @@ class BooksApp extends React.Component {
         this.bookShelfing();
       });
     
-  }
+  };
+
 
   /**
    * @description Categorizes all books into shelves (CurrentlyReading, WantToRead, Read)
@@ -44,38 +47,29 @@ class BooksApp extends React.Component {
     }));
   };
 
+
   /**
    * @description Updates book's shelf from one to another (currentlyReading to read based on user click)
    * @param {object} book - The book which shelf needs to be updated
    * @param {string} shelf - To which shelf the book is moving
    */
   updateStateShelf = (book, shelf) => {
-    Object.keys(this.state.bookShelf).forEach((key) => {
-
-      if(book.shelf === key) { 
-
-        // create an copy of bookshelf object
-        let stateCopy = Object.assign({}, this.state.bookShelf)
-      
-        // remove the book from shelf
-        stateCopy[key] = stateCopy[key].filter((cbook) => {
-         return cbook.id !== book.id
-        });
-        
-        // add book to shelf
-        if(stateCopy[shelf]) {
-          stateCopy[shelf].push(book);
-        }
-
-        // update state
-        this.setState(() => ({
-          bookShelf: stateCopy
-        }));
-
-      } 
+    const { Books } = this.state;
+    Books.map((cbook) => {
+      if(cbook.id === book.id) {
+        book.shelf = shelf
+      }
+      return cbook;
     });
+
+    this.setState((curState) => ({
+        Books: [...curState.Books]
+    }));
+
+    this.bookShelfing();
   };
 
+  
   /**
    * @description: Updates book'S shelf in BooksAPI
    * @param {object} book - The book which shelf needs to be updated
@@ -85,9 +79,10 @@ class BooksApp extends React.Component {
     this.updateStateShelf(book, shelf); 
     BooksAPI.update(book, shelf)
       .then(()=> {
-        this.getAllBooks();
-      });
+       this.getAllBooks();
+    });
   };
+
 
   render() {
     const { Books, bookShelf } = this.state;
