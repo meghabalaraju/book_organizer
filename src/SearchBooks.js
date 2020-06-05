@@ -116,7 +116,7 @@ class SearchBooks extends Component {
                             <li key={cBook.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={ cBook.imageLinks ? { width: 128, height: 193, backgroundImage: `url(${cBook.imageLinks.thumbnail})` } : {width: 128, height: 193} }></div>
+                                        <div className="book-cover" style={ {width: 128, height: 193, backgroundImage:`url(${cBook.imageLinks && cBook.imageLinks.thumbnail?`${cBook.imageLinks.thumbnail}`:`http://via.placeholder.com/128x193?text=No%20Cover`})`} }></div>
                                             <div className="book-shelf-changer">
                                                 <select defaultValue={cBook.shelf} onChange={(e) => this.handleChange(e, cBook)}>
                                                     <option value="move" disabled>Move to...</option>
@@ -128,11 +128,7 @@ class SearchBooks extends Component {
                                             </div>
                                         </div>
                                         <div className="book-title">{cBook.title}</div>
-                                        {cBook.authors ? (
-                                            <div className="book-authors">{cBook.authors}</div>
-                                        ) : (
-                                            <div className="book-authors" style={{color: "#a37955"}}>Author unknown</div>
-                                        )}
+                                        <div className="book-authors">{Array.isArray(cBook.authors) ? cBook.authors.join(', '):''}</div>
                                 </div>
                             </li>
                         ))}
