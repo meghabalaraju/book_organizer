@@ -1,6 +1,6 @@
 # MyReads Project
 
-This is the final assessment project for Udacity's React Fundamentals course. The goal of this assessment is to create MyReads project. I've used provided template and added interactivity to it.
+This project is part of Udacity's React Nanodegree. The goal of this assessment is to create MyReads project.
 
 ## Installation
 
